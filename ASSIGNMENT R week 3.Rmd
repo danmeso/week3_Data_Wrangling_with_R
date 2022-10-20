@@ -1,0 +1,136 @@
+---
+title: "Telecom Customer Retention"
+output: html_notebook
+---
+
+
+## 1. Installing packages 
+
+
+
+```{r}
+install.packages("tidyverse")
+```
+
+#### Load tidyverse for use in our notebook
+```{r}
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+```
+
+## 2. Data Importation
+
+
+
+```{r}
+
+
+telecomcust_df <- read_csv("telecom_customer.csv")
+telecomcust_df
+```
+
+
+
+```{r}
+
+sample_n(telecomcust_df, 10)
+```
+
+```{r}
+
+
+dim(telecomcust_df)
+```
+
+
+
+
+
+##  Performing Standardisation
+
+
+
+```{r}
+telecom_df <- read_csv("telecom_customer.csv")
+telecom_df
+
+# Strip the leading and trailing spaces
+names(telecom_df) <- trimws(names(telecom_df), which = c("both"))
+names(telecom_df)
+
+```
+
+
+```{r}
+names(telecom_df) <- tolower(names(telecom_df))
+names(telecom_df)
+```
+
+
+
+## 5. Handling Irrelevant Data
+
+### Dropping customer_id column
+
+```{r}
+head(telecom_df)
+
+telecom_df = select(telecom_df, -c("customerid"))
+head(telecom_df)
+```
+
+
+
+```{r}
+# Let's determine the number of records using dim()
+dim(telecom_df)
+```
+
+
+
+```{r}
+
+unique(telecom_df)
+
+```
+
+```{r}
+
+summary(telecom_df)
+
+```
+
+### Metric of Success 
+### solution will have satisfied the research question when you can identify the factors that contribute to customer churn.
+
+```{r}
+
+head(telecom_df)
+```
+
+
+
+
+### What number of customers who left within the last month ?
+
+```{r}
+ggplot(data = telecom_df , aes(x = churn,fill = churn)) + geom_bar()  + geom_text(stat = 'count' , aes(label = paste("n = " , formatC(..count..))),vjust = -0.5) + theme_minimal() + ggtitle("Number of customer churn") + theme(plot.title = element_text(hjust = 0.5))
+```
+### What type of internet services do customers have ?
+```{r}
+ggplot(data = telecom_df, aes(x = churn,fill = internetservice)) + geom_bar(stat = "count",position = position_dodge()) + geom_text(stat = "count" , aes(label = paste("n = " , formatC(..count..))),vjust = -0.5 , position = position_dodge(0.9)) + ggtitle("Customer Churn by Internet Services") + theme_minimal() + theme(plot.title = element_text(hjust = 0.5))
+
+```
+## highest chyrn rate is on fiber optic as an internet service 
+
+## What a number of churn cutomers by gender ?
+
+
+
+```{r}
+
+ggplot(data = telecom_df, aes(x = churn,fill = gender)) + geom_bar(stat = "count",position = position_dodge()) + geom_text(stat = "count" , aes(label = paste("n = " , formatC(..count..))),vjust = -0.5 , position = position_dodge(0.9)) + ggtitle("Customers Churn by Gender") + theme_minimal() + theme(plot.title = element_text(hjust = 0.5))
+```
+
+## Churn rate is the same  for both vendors
